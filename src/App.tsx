@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Stack } from "@mui/material";
 import { PeerData } from "./services/types";
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
-import JoystickController from "./components/Joystick";
+import JoystickController from "./components/Father";
 // import cameraController from "./components/cameracontral";
 import Peer, { DataConnection } from "peerjs";
 

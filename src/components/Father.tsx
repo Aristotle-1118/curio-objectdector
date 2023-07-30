@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Joystick } from "react-joystick-component";
+// import { Joystick } from "react-joystick-component";
 import { Box, Button, Container, Stack } from "@mui/material";
 import { Curio } from "../services/curioServices";
 import { DataType, PeerData } from "../services/types";
-import { videocomponent } from "../components/cameracontral"
-import Camera from "../components/truecameracontral"
+import { videocomponent } from "./cameracontral"
+// import Camera from "../components/truecameracontral"
+import ObjectDetection from "./detectcam"
 
 type Props = {
 	sendMessage: ((message: PeerData) => void) | undefined;
@@ -16,7 +17,28 @@ export default function JoystickControlle({ sendMessage }: Props) {
 	const [open, setOpen] = useState<boolean>(false);
 	const videocomponen = new videocomponent();
 	const curio = new Curio();
+	const [flag, setFlag] = useState(0);
+	let intervalId: NodeJS.Timer;
 
+	const startGoLeft = () => {
+		intervalId = setInterval(goLeft, 1000); // 运行goLeft函数每秒一次
+						};
+
+	const stopGoLeft = () => {
+			clearInterval(intervalId); // 停止定期运行goLeft函数
+						};
+	const goLeft = () => {
+		if (sendMessage) {
+			const moveData = {
+				type: 2,
+				data: { x: 0, y: 1000, speed: 600 },
+			};
+			sendMessage(moveData);
+		} else {
+			curio.UART.write("go(1000, 0, 600)\n", () => { });
+		}
+	};
+	
 	const goForward = () => {
 		if (sendMessage) {
 			const moveData = {
@@ -93,10 +115,27 @@ export default function JoystickControlle({ sendMessage }: Props) {
 			curio.setParameters(0, 0, 0);
 		}
 	};
-
+	useEffect(() => {
+		let intervalId: NodeJS.Timer;
+	  
+		if (flag === 1) {
+			stopGoLeft()
+		  intervalId = setInterval(() => {
+			goForward();
+		  }, 1000);
+		}
+	  
+		return () => {
+		  if (intervalId) {
+			clearInterval(intervalId);
+		  }
+		};
+	  }, [flag, goForward]);
+	  // use react hook useEffect to contral the robot to move whenever it detect the person
 
 	useEffect(() => {
 		let intervalId: NodeJS.Timer;
+		
 
 		if (isMoving) {
 			if (sendMessage) {
@@ -146,7 +185,29 @@ export default function JoystickControlle({ sendMessage }: Props) {
 			spacing={20}
 		>
 
+					<Button 
+						onClick={() => {
+							setOpen(true);
+							// startGoLeft();
 
+						}}
+						
+						style={
+							{
+								backgroundColor: "rgba(0, 61, 89, 255)",
+
+							}
+
+					}
+					sx={{ mt: 10 }}
+					variant="contained">
+					{"detectcam"}
+					
+					
+					</Button>
+					{open && <ObjectDetection setFlag={setFlag} />}
+					{flag === 1 ? 'Person Detected' : 'No Person Detected'}
+										
 			<Button
 				onClick={() => {
 					handleConnect();
@@ -155,9 +216,12 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					isConnected
 						? {
 							backgroundColor: "rgba(171, 61, 89, 255)",
+							background: 'linear-gradient(45deg, #007BFF 30%, #00B0FF 90%)'
+
 						}
 						: {
-							backgroundColor: "rgba(61, 89, 171, 255)",
+							// backgroundColor: "rgba(61, 89, 171, 255)",
+							background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
 						}
 				}
 				sx={{ mt: 10 }}
@@ -165,13 +229,17 @@ export default function JoystickControlle({ sendMessage }: Props) {
 			>
 				{isConnected ? "DISCONNECT" : "CONNECT TO CURIO"}
 			</Button>
-			<Button onClick={() => setOpen(true)}>
+			{/* <Button onClick={() => setOpen(true)}>
 				camera
 			</Button>
-			{open && <Camera />}
+			{open && <Camera />} */}
+			{/* <Button onClick={() => setOpen(true)}>
+				detectcam
+			</Button>
+			{open && <ObjectDetection />} */}
 
 
-			{isConnected && (
+			{/* {isConnected && (
 
 				<Joystick
 					move={(e) => {
@@ -185,11 +253,17 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					}}
 					throttle={10}
 				/>
-			)}
+			)} */}
 			{isConnected && (
 				<Button
 					onClick={() => {
-						goForward();
+						// goLeft();
+						startGoLeft();
+						// stopGoLeft();
+						
+						// startGoLeft();
+						// stopGoLeft();
+						// handleMove(0,1000,100);
 					}}
 					style={
 						{
@@ -201,14 +275,43 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					sx={{ mt: 10 }}
 					variant="contained"
 				>
-					{"haoa"}
+					{"moveforward"}
 
 				</Button>
 			)}
+			{isConnected && (
+
+					<Button 
+						onClick={() => {
+							setOpen(true)
+							startGoLeft();
+							handleStop()
+
+						}}
+						
+						style={
+							{
+								backgroundColor: "rgba(0, 61, 89, 255)",
+
+							}
+
+					}
+					sx={{ mt: 10 }}
+					variant="contained">
+					{"detectcam"}
+					
+					
+					</Button>)}
+					{open && <ObjectDetection setFlag={setFlag} />}
+					{/* if(ObjectDetection.) */}
+				
+			
+			
 			{/* {isConnected &&(
 				// videocomponen.VideoComponent()
 				Camera()
 			)} */}
+			
 
 		</Stack>
 	);
