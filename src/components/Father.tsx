@@ -18,15 +18,75 @@ export default function JoystickControlle({ sendMessage }: Props) {
 	const videocomponen = new videocomponent();
 	const curio = new Curio();
 	const [flag, setFlag] = useState(0);
-	let intervalId: NodeJS.Timer;
-
+	// let intervalId: NodeJS.Timer;
+	// const startGoLeft = () => {
+	// 	let intervalId: NodeJS.Timer = setInterval(())
+	
+	// 	// 先停止当前运行的 goLeft
+	// 	if (intervalId) {
+	// 		clearInterval(intervalId);
+	// 	}
+	
+	// 	// 检查 flag 的值
+	// 	if (flag !== 1) {
+	// 		// 如果 flag 不等于 0，每秒运行一次 goLeft 函数
+	// 		intervalId = setInterval(goLeft, 1000);
+	// 	}
+	// };
+	
+	
 	const startGoLeft = () => {
-		intervalId = setInterval(goLeft, 1000); // 运行goLeft函数每秒一次
-						};
-
-	const stopGoLeft = () => {
-			clearInterval(intervalId); // 停止定期运行goLeft函数
-						};
+		let intervalId: NodeJS.Timer = setInterval(() => {
+			if (flag !== 1) {
+				goLeft();
+			}else{goForward()}
+		}, 1000);
+	};
+	
+	// const startGoLeft = () => {
+	// 	let intervalId: NodeJS.Timer | null = null;
+	// 		if (intervalId === null) {
+	// 		intervalId = setInterval(() => {
+	// 			// let flag=1 
+	// 			if (flag == 1) {
+	// 				curio.stop();
+	// 				if (intervalId !== null) {
+	// 					clearInterval(intervalId);
+	// 					intervalId = null;
+	// 				}
+	// 			} else {
+	// 				goLeft();
+	// 			}
+	// 		}, 1000);
+	// 	}
+	// };
+	// const manageGoLeft = () => {
+	// 	let intervalId: NodeJS.Timer | null = null;
+	
+	// 	const startGoLeft = () => {
+	// 		if (intervalId === null) {
+	// 			intervalId = setInterval(goLeft, 1000);
+	// 		}
+	// 	};
+	
+	// 	const stopGoLeft = () => {
+	// 		if (intervalId !== null) {
+	// 			clearInterval(intervalId);
+	// 			intervalId = null;
+				
+	// 		}
+	// 	};
+	
+	// 	// 将 startGoLeft 和 stopGoLeft 函数返回，使它们可以在外部使用
+	// 	return { startGoLeft, stopGoLeft };
+	// };
+	
+	// // 调用 manageGoLeft 获取 startGoLeft 和 stopGoLeft 函数
+	// const { startGoLeft, stopGoLeft } = manageGoLeft();
+	
+	// // 在外部使用 startGoLeft 函数
+	// // startGoLeft();
+	
 	const goLeft = () => {
 		if (sendMessage) {
 			const moveData = {
@@ -119,7 +179,10 @@ export default function JoystickControlle({ sendMessage }: Props) {
 		let intervalId: NodeJS.Timer;
 	  
 		if (flag === 1) {
-			stopGoLeft()
+			
+			// stopGoLeft();
+			// handleStop
+			// curio.stop
 		  intervalId = setInterval(() => {
 			goForward();
 		  }, 1000);
@@ -132,7 +195,12 @@ export default function JoystickControlle({ sendMessage }: Props) {
 		};
 	  }, [flag, goForward]);
 	  // use react hook useEffect to contral the robot to move whenever it detect the person
-
+	  useEffect(() => {
+		if (open) {
+		  startGoLeft();
+		}
+	  }, [open]); // 当 open 的值发生改变时，这个 useEffect 就会运行
+	  
 	useEffect(() => {
 		let intervalId: NodeJS.Timer;
 		
@@ -185,10 +253,10 @@ export default function JoystickControlle({ sendMessage }: Props) {
 			spacing={20}
 		>
 
-					<Button 
+					{/* <Button 
 						onClick={() => {
 							setOpen(true);
-							// startGoLeft();
+							
 
 						}}
 						
@@ -206,7 +274,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					
 					</Button>
 					{open && <ObjectDetection setFlag={setFlag} />}
-					{flag === 1 ? 'Person Detected' : 'No Person Detected'}
+					{flag === 1 ? 'Person Detected' : 'No Person Detected'} */}
 										
 			<Button
 				onClick={() => {
@@ -257,8 +325,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 			{isConnected && (
 				<Button
 					onClick={() => {
-						// goLeft();
-						startGoLeft();
+						// startGoLeft();
 						// stopGoLeft();
 						
 						// startGoLeft();
@@ -284,8 +351,15 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					<Button 
 						onClick={() => {
 							setOpen(true)
-							startGoLeft();
-							handleStop()
+							// {open && <ObjectDetection setFlag={setFlag} />}
+							// let flag=1
+							// {open && <ObjectDetection setFlag={setFlag} />}
+							// {flag === 1 ? 'Person Detected' : 'No Person Detected'}
+							// {flag===1 ? stopGoLeft:startGoLeft};
+							
+
+							// {open && <ObjectDetection setFlag={setFlag} />}
+							// handleStop()
 
 						}}
 						
@@ -303,17 +377,10 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					
 					</Button>)}
 					{open && <ObjectDetection setFlag={setFlag} />}
-					{/* if(ObjectDetection.) */}
-				
-			
-			
-			{/* {isConnected &&(
-				// videocomponen.VideoComponent()
-				Camera()
-			)} */}
-			
-
+					{flag === 1 ? 'Person Detected' : 'No Person Detected'}
 		</Stack>
+		
 	);
+	
 }
 
