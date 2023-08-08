@@ -17,7 +17,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 	const [open, setOpen] = useState<boolean>(false);
 	const videocomponen = new videocomponent();
 	const curio = new Curio();
-	const [flag, setFlag] = useState(0);
+	const [flag, setFlag] = useState();
 	// let intervalId: NodeJS.Timer;
 	// const startGoLeft = () => {
 	// 	let intervalId: NodeJS.Timer = setInterval(())
@@ -37,9 +37,13 @@ export default function JoystickControlle({ sendMessage }: Props) {
 	
 	const startGoLeft = () => {
 		let intervalId: NodeJS.Timer = setInterval(() => {
+			
 			if (flag !== 1) {
 				goLeft();
-			}else{goForward()}
+				console.log("left")
+			// }else{goForward()
+			// 	console.log("goforward")
+			}
 		}, 1000);
 	};
 	
@@ -176,30 +180,51 @@ export default function JoystickControlle({ sendMessage }: Props) {
 		}
 	};
 	useEffect(() => {
+		if (flag === 1) {
 		let intervalId: NodeJS.Timer;
 	  
-		if (flag === 1) {
 			
 			// stopGoLeft();
 			// handleStop
 			// curio.stop
 		  intervalId = setInterval(() => {
-			goForward();
+			if (flag === 1) {
+				goForward();
+			}
 		  }, 1000);
-		}
 	  
 		return () => {
 		  if (intervalId) {
 			clearInterval(intervalId);
 		  }
-		};
+		}
+		}else if (flag===0){
+			let intervalId: NodeJS.Timer;
+	  
+			
+			// stopGoLeft();
+			// handleStop
+			// curio.stop
+		  intervalId = setInterval(() => {
+			if (flag == 0) {
+				goLeft();
+			}
+		  }, 1000);
+	  
+		return () => {
+		  if (intervalId) {
+			clearInterval(intervalId);
+		  }
+		}
+			
+		}
 	  }, [flag, goForward]);
 	  // use react hook useEffect to contral the robot to move whenever it detect the person
-	  useEffect(() => {
-		if (open) {
-		  startGoLeft();
-		}
-	  }, [open]); // 当 open 的值发生改变时，这个 useEffect 就会运行
+	//   useEffect(() => {
+	// 	if (open) {
+	// 	//   startGoLeft();
+	// 	}
+	//   }, [open]); // 当 open 的值发生改变时，这个 useEffect 就会运行
 	  
 	useEffect(() => {
 		let intervalId: NodeJS.Timer;
