@@ -90,8 +90,8 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Home />} />
-				{/* <Route path="/:roomID" element={<HomePeer />} /> */}
 				<Route path="/detect" element={<ObjectDetection sendMessage={sendMessage} />} />
+				<Route path="/:roomID" element={<HomePeer />} />
 				{/* <Route path="/test" element={<JoystickController2 sendMessage={sendMessage}/>} /> */}
 
 			</Routes>
