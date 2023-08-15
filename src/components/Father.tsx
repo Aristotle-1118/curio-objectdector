@@ -6,6 +6,9 @@ import { DataType, PeerData } from "../services/types";
 import { videocomponent } from "./cameracontral"
 // import Camera from "../components/truecameracontral"
 import ObjectDetection from "./detectcam"
+import { useNavigate } from 'react-router-dom';
+
+
 
 type Props = {
 	sendMessage: ((message: PeerData) => void) | undefined;
@@ -15,9 +18,11 @@ export default function JoystickControlle({ sendMessage }: Props) {
 	const [isConnected, setIsConnected] = useState<boolean>(false);
 	const [isMoving, setIsMoving] = useState<boolean>(false);
 	const [open, setOpen] = useState<boolean>(false);
-	const videocomponen = new videocomponent();
 	const curio = new Curio();
 	const [flag, setFlag] = useState();
+	const navigate = useNavigate();
+	// finish the function of router
+
 	// let intervalId: NodeJS.Timer;
 	// const startGoLeft = () => {
 	// 	let intervalId: NodeJS.Timer = setInterval(())
@@ -47,49 +52,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 		}, 1000);
 	};
 	
-	// const startGoLeft = () => {
-	// 	let intervalId: NodeJS.Timer | null = null;
-	// 		if (intervalId === null) {
-	// 		intervalId = setInterval(() => {
-	// 			// let flag=1 
-	// 			if (flag == 1) {
-	// 				curio.stop();
-	// 				if (intervalId !== null) {
-	// 					clearInterval(intervalId);
-	// 					intervalId = null;
-	// 				}
-	// 			} else {
-	// 				goLeft();
-	// 			}
-	// 		}, 1000);
-	// 	}
-	// };
-	// const manageGoLeft = () => {
-	// 	let intervalId: NodeJS.Timer | null = null;
-	
-	// 	const startGoLeft = () => {
-	// 		if (intervalId === null) {
-	// 			intervalId = setInterval(goLeft, 1000);
-	// 		}
-	// 	};
-	
-	// 	const stopGoLeft = () => {
-	// 		if (intervalId !== null) {
-	// 			clearInterval(intervalId);
-	// 			intervalId = null;
-				
-	// 		}
-	// 	};
-	
-	// 	// 将 startGoLeft 和 stopGoLeft 函数返回，使它们可以在外部使用
-	// 	return { startGoLeft, stopGoLeft };
-	// };
-	
-	// // 调用 manageGoLeft 获取 startGoLeft 和 stopGoLeft 函数
-	// const { startGoLeft, stopGoLeft } = manageGoLeft();
-	
-	// // 在外部使用 startGoLeft 函数
-	// // startGoLeft();
+
 	
 	const goLeft = () => {
 		if (sendMessage) {
@@ -102,6 +65,21 @@ export default function JoystickControlle({ sendMessage }: Props) {
 			curio.UART.write("go(1000, 0, 600)\n", () => { });
 		}
 	};
+
+	const goRight = () => {
+		if (sendMessage) {
+			const moveData = {
+				type: 2,
+				data: { x: 1000, y: 0, speed: 600 },
+			};
+			sendMessage(moveData);
+		} else {
+			curio.UART.write("go(0, 1000, 600)\n", () => { });
+		}
+	};
+
+
+
 	
 	const goForward = () => {
 		if (sendMessage) {
@@ -179,52 +157,79 @@ export default function JoystickControlle({ sendMessage }: Props) {
 			curio.setParameters(0, 0, 0);
 		}
 	};
+	// useEffect(() => {
+	// 	if (flag === 1) {
+	// 	let intervalId: NodeJS.Timer;
+	  
+			
+	// 		// stopGoLeft();
+	// 		// handleStop
+	// 		// curio.stop
+	// 	  intervalId = setInterval(() => {
+	// 		if (flag === 1) {
+	// 			goForward();
+	// 		}
+	// 	  }, 1000);
+	  
+	// 	return () => {
+	// 	  if (intervalId) {
+	// 		clearInterval(intervalId);
+	// 	  }
+	// 	}
+	// 	}else if (flag===0){
+	// 		let intervalId: NodeJS.Timer;
+	  
+			
+	// 		// stopGoLeft();
+	// 		// handleStop
+	// 		// curio.stop
+	// 	  intervalId = setInterval(() => {
+	// 		if (flag == 0) {
+	// 			goLeft();
+	// 		}
+	// 	  }, 1000);
+	  
+	// 	return () => {
+	// 	  if (intervalId) {
+	// 		clearInterval(intervalId);
+	// 	  }
+	// 	}
+			
+	// 	}
+	//   }, [flag, goForward]);
 	useEffect(() => {
-		if (flag === 1) {
 		let intervalId: NodeJS.Timer;
 	  
-			
-			// stopGoLeft();
-			// handleStop
-			// curio.stop
+		if (flag === 1) {
 		  intervalId = setInterval(() => {
 			if (flag === 1) {
-				goForward();
+			  console.log("Going forward"); // 标记转向方向
+			  goForward();
 			}
 		  }, 1000);
-	  
-		return () => {
-		  if (intervalId) {
-			clearInterval(intervalId);
-		  }
-		}
-		}else if (flag===0){
-			let intervalId: NodeJS.Timer;
-	  
-			
-			// stopGoLeft();
-			// handleStop
-			// curio.stop
+		} else if (flag === 0) {
 		  intervalId = setInterval(() => {
 			if (flag == 0) {
-				goLeft();
+			  console.log("Going left"); // 标记转向方向
+			  goLeft();
 			}
 		  }, 1000);
+		} else if (flag === 2) {
+		  intervalId = setInterval(() => {
+			if (flag == 2) {
+			  console.log("Going right"); // 标记转向方向
+			  goRight();
+			}
+		  }, 1000);
+		}
 	  
 		return () => {
 		  if (intervalId) {
 			clearInterval(intervalId);
 		  }
-		}
-			
-		}
-	  }, [flag, goForward]);
-	  // use react hook useEffect to contral the robot to move whenever it detect the person
-	//   useEffect(() => {
-	// 	if (open) {
-	// 	//   startGoLeft();
-	// 	}
-	//   }, [open]); // 当 open 的值发生改变时，这个 useEffect 就会运行
+		};
+	  }, [flag, goForward, goLeft, goRight]);
+	  
 	  
 	useEffect(() => {
 		let intervalId: NodeJS.Timer;
@@ -347,7 +352,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					throttle={10}
 				/>
 			)} */}
-			{isConnected && (
+			{/* {isConnected && (
 				<Button
 					onClick={() => {
 						// startGoLeft();
@@ -370,8 +375,8 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					{"moveforward"}
 
 				</Button>
-			)}
-			{isConnected && (
+			)} */}
+			{/* {isConnected && (
 
 					<Button 
 						onClick={() => {
@@ -402,7 +407,22 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					
 					</Button>)}
 					{open && <ObjectDetection setFlag={setFlag} />}
-					{flag === 1 ? 'Person Detected' : 'No Person Detected'}
+					{flag === 1 ? 'Person Detected' : 'No Person Detected'} */}
+					{isConnected && (
+                <Button
+                    onClick={() => {
+                        navigate('/detect'); // 在点击按钮时，导航到新的/detect路由
+                    }}
+                    style={{
+                        backgroundColor: "rgba(0, 61, 89, 255)",
+                    }}
+                    sx={{ mt: 10 }}
+                    variant="contained"
+                >
+                    {"detectcam"}
+                </Button>
+            )}
+            {flag === 1 ? 'Person Detected' : 'No Person Detected'}
 		</Stack>
 		
 	);
