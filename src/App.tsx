@@ -7,7 +7,7 @@ import JoystickController from "./components/Father";
 // import cameraController from "./components/cameracontral";
 import Peer, { DataConnection } from "peerjs";
 import ObjectDetection from "./components/detectcam"
-// import JoystickController2 from "./components/test" 
+// import JoystickController2 from "./components/test"
 
 
 function Home() {
@@ -78,7 +78,6 @@ function HomePeer() {
 }
 
 function App() {
-	const [flag, setFlag] = useState();
 	const [connection, setConnection] = useState<DataConnection>(); // Store the connection
 	const sendMessage = (data: PeerData) => {
 		if (connection) {
@@ -91,8 +90,8 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Home />} />
-				<Route path="/:roomID" element={<HomePeer />} />
-				<Route path="/detect" element={<ObjectDetection setFlag={setFlag}/>} />
+				{/* <Route path="/:roomID" element={<HomePeer />} /> */}
+				<Route path="/detect" element={<ObjectDetection sendMessage={sendMessage} />} />
 				{/* <Route path="/test" element={<JoystickController2 sendMessage={sendMessage}/>} /> */}
 
 			</Routes>
