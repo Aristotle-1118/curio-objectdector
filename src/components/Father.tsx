@@ -352,7 +352,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					throttle={10}
 				/>
 			)} */}
-			{/* {isConnected && (
+			{isConnected && (
 				<Button
 					onClick={() => {
 						// startGoLeft();
@@ -375,7 +375,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					{"moveforward"}
 
 				</Button>
-			)} */}
+			)}
 			{/* {isConnected && (
 
 					<Button 
@@ -422,7 +422,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
                     {"detectcam"}
                 </Button>
             )}
-            {flag === 1 ? 'Person Detected' : 'No Person Detected'}
+            {/* {flag === 1 ? 'Person Detected' : 'No Person Detected'} */}
 		</Stack>
 		
 	);
