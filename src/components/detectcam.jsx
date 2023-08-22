@@ -14,7 +14,7 @@ const ObjectDetection = ({ sendMessage }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const curio = new Curio();
-  const [flag, setFlag] = useState(0);
+  const [flag, setFlag] = useState(1);
   // const [xh,setxh]= useState(0)
 
   // const [yh,setyh]= useState()
@@ -52,13 +52,13 @@ const ObjectDetection = ({ sendMessage }) => {
     if (sendMessage) {
       const moveData = {
         type: 2,
-        data: { x: 1000, y: 1000, speed: 700 },
+        data: { x: x, y: y, speed: distance },
       };
       
       sendMessage(moveData);
       curio.UART.write(`go(${x}, ${y}, ${z})\n`, () => {});
     } else {
-      curio.UART.write("go(1000, 0, 600)\n", () => {});
+      curio.UART.write("go(1000, 1000, 600)\n", () => {});
     }
   };
   const sendCoordinates = (x, y, z) =>{
