@@ -14,16 +14,16 @@ const ObjectDetection = ({ sendMessage }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const curio = new Curio();
-  const [flag, setFlag] = useState();
+  const [flag, setFlag] = useState(0);
   // const [xh,setxh]= useState(0)
 
   // const [yh,setyh]= useState()
-  let xh = 1000
-  let yh = 1000
+  let xh = 0
+  let yh = 0
   let distanceh = 800
   // let flag = 0
   // const [distanceh,setdistanceh]= useState(0) 
-  const [alopen,setalopen] = useState(0)
+  const [alopen,setalopen] = useState(1)
 
 
 
@@ -110,50 +110,62 @@ const ObjectDetection = ({ sendMessage }) => {
       ;
     }
   };
-  useEffect(() => {
-    let intervalId;
+    useEffect(() => {
+      let intervalId;
+  
+      if (flag === 1) {
+        intervalId = setInterval(() => {
+          if (flag === 1) {
+            console.log("Going forward"); // 标记转向方向直走
+            // goForward();
+            // finalmove = (1000,1000,600)
+            sendCoordinates(xh,yh,distanceh)
+          }
+        }, 1000)}},[xh,yh,distanceh, goForward, goLeft, goRight,sendCoordinates]);
+  // useEffect(() => {
+  //   let intervalId;
 
-    if (flag === 1) {
-      intervalId = setInterval(() => {
-        if (flag === 1) {
-          console.log("Going forward"); // 标记转向方向直走
-          // goForward();
-          // finalmove = (1000,1000,600)
-          sendCoordinates(xh,yh,distanceh)
-        }
-      }, 1000);
-    } else if (flag === 0) {
-      intervalId = setInterval(() => {
-        if (flag == 0) {
-          console.log("Going left"); // 标记转向方向左转
-          goLeft();
-          // handleMove(1000,0,600)
-        }
-      }, 1000);
-    } else if (flag === 2) {
-      intervalId = setInterval(() => {
-        if (flag == 2) {
-          console.log("Going right"); // 标记转向方向右转
-          goRight();
-        }
-      }, 1000);
-    } else if (flag === 3) {
-      intervalId = setInterval(() => {
-        if (flag == 3) {
-          // console.log("smoooth Going right"); // 标记转向方向右转
-          sendCoordinates(xh,yh,distanceh)
-        }
-      }, 1000);
-    }else if(flag === 4){
-      sendCoordinates(xh,yh,distanceh)
-    }
+  //   if (flag === 1) {
+  //     intervalId = setInterval(() => {
+  //       if (flag === 1) {
+  //         console.log("Going forward"); // 标记转向方向直走
+  //         // goForward();
+  //         // finalmove = (1000,1000,600)
+  //         sendCoordinates(xh,yh,distanceh)
+  //       }
+  //     }, 1000);
+  //   } else if (flag === 0) {
+  //     intervalId = setInterval(() => {
+  //       if (flag == 0) {
+  //         console.log("Going left"); // 标记转向方向左转
+  //         goLeft();
+  //         // handleMove(1000,0,600)
+  //       }
+  //     }, 1000);
+  //   } else if (flag === 2) {
+  //     intervalId = setInterval(() => {
+  //       if (flag == 2) {
+  //         console.log("Going right"); // 标记转向方向右转
+  //         goRight();
+  //       }
+  //     }, 1000);
+  //   } else if (flag === 3) {
+  //     intervalId = setInterval(() => {
+  //       if (flag == 3) {
+  //         // console.log("smoooth Going right"); // 标记转向方向右转
+  //         sendCoordinates(xh,yh,distanceh)
+  //       }
+  //     }, 1000);
+  //   }else if(flag === 4){
+  //     sendCoordinates(xh,yh,distanceh)
+  //   }
 
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [flag,xh,yh,distanceh, goForward, goLeft, goRight,handleMove]);
+  //   return () => {
+  //     if (intervalId) {
+  //       clearInterval(intervalId);
+  //     }
+  //   };
+  // }, [flag,xh,yh,distanceh, goForward, goLeft, goRight,handleMove]);
 
   useEffect(() => {
     const runObjectDetection = async () => {
@@ -229,8 +241,11 @@ const ObjectDetection = ({ sendMessage }) => {
           switch (alopen) {
             case 1:
               if (centerX > lowerBound && centerX < upperBound) {
-                setFlag(1); // 持续直行
+                // setFlag(1); // 持续直行
                 // flag = 1
+                xh=1000
+                yh=1000
+                distanceh = 600
                 console.log("这是中centerX的值:", centerX);
                 console.log("这是中lowerBound的值:", lowerBound);
                 console.log("这是中upperBound的值:", upperBound); 
@@ -238,7 +253,7 @@ const ObjectDetection = ({ sendMessage }) => {
              
               } else {
                 if (centerX <= lowerBound) {
-                  setFlag(3); // flag=3顺滑左转
+                  // setFlag(3); // flag=3顺滑左转
 
                   const delta = 70 - sectionNumber;
                 console.log("这是左centerX的值:", centerX);
@@ -273,8 +288,8 @@ const ObjectDetection = ({ sendMessage }) => {
                 // setxh(delta*11)
                 // setyh(delta*11)
                 //   setdistanceh(600)
-                  xh= delta*11
-                  yh = -delta*11
+                  xh= -delta*11
+                  yh = delta*11
                   distanceh = 700
 
                   
