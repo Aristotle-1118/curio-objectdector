@@ -197,82 +197,82 @@ export default function JoystickControlle({ sendMessage }: Props) {
 			
 	// 	}
 	//   }, [flag, goForward]);
-	useEffect(() => {
-		let intervalId: NodeJS.Timer;
+	// useEffect(() => {
+	// 	let intervalId: NodeJS.Timer;
 	  
-		if (flag === 1) {
-		  intervalId = setInterval(() => {
-			if (flag === 1) {
-			  console.log("Going forward"); // 标记转向方向
-			  goForward();
-			}
-		  }, 1000);
-		} else if (flag === 0) {
-		  intervalId = setInterval(() => {
-			if (flag == 0) {
-			  console.log("Going left"); // 标记转向方向
-			  goLeft();
-			}
-		  }, 1000);
-		} else if (flag === 2) {
-		  intervalId = setInterval(() => {
-			if (flag == 2) {
-			  console.log("Going right"); // 标记转向方向
-			  goRight();
-			}
-		  }, 1000);
-		}
+	// 	if (flag === 1) {
+	// 	  intervalId = setInterval(() => {
+	// 		if (flag === 1) {
+	// 		  console.log("Going forward"); // 标记转向方向
+	// 		  goForward();
+	// 		}
+	// 	  }, 1000);
+	// 	} else if (flag === 0) {
+	// 	  intervalId = setInterval(() => {
+	// 		if (flag == 0) {
+	// 		  console.log("Going left"); // 标记转向方向
+	// 		  goLeft();
+	// 		}
+	// 	  }, 1000);
+	// 	} else if (flag === 2) {
+	// 	  intervalId = setInterval(() => {
+	// 		if (flag == 2) {
+	// 		  console.log("Going right"); // 标记转向方向
+	// 		  goRight();
+	// 		}
+	// 	  }, 1000);
+	// 	}
 	  
-		return () => {
-		  if (intervalId) {
-			clearInterval(intervalId);
-		  }
-		};
-	  }, [flag, goForward, goLeft, goRight]);
+	// 	return () => {
+	// 	  if (intervalId) {
+	// 		clearInterval(intervalId);
+	// 	  }
+	// 	};
+	//   }, [flag, goForward, goLeft, goRight]);
 	  
 	  
-	useEffect(() => {
-		let intervalId: NodeJS.Timer;
+	// useEffect(() => {
+	// 	let intervalId: NodeJS.Timer;
 		
 
-		if (isMoving) {
-			if (sendMessage) {
-				const moveCommand: PeerData = {
-					type: DataType.CURIO_MOVE,
-					data: { message: "move" },
-				};
-				sendMessage(moveCommand);
-			} else {
-				curio.move();
-			}
-			intervalId = setInterval(() => {
-				if (sendMessage) {
-					const moveCommand: PeerData = {
-						type: DataType.CURIO_MOVE,
-						data: { message: "move" },
-					};
-					sendMessage(moveCommand);
-				} else {
-					curio.move();
-				}
-			}, 1000);
-		}
+	// 	if (isMoving) {
+	// 		if (sendMessage) {
+	// 			const moveCommand: PeerData = {
+	// 				type: DataType.CURIO_MOVE,
+	// 				data: { message: "move" },
+	// 			};
+	// 			sendMessage(moveCommand);
+	// 		} else {
+	// 			curio.move();
+	// 		}
+	// 		intervalId = setInterval(() => {
+	// 			if (sendMessage) {
+	// 				const moveCommand: PeerData = {
+	// 					type: DataType.CURIO_MOVE,
+	// 					data: { message: "move" },
+	// 				};
+	// 				sendMessage(moveCommand);
+	// 			} else {
+	// 				curio.move();
+	// 			}
+	// 		}, 1000);
+	// 	}
 
-		return () => {
-			clearInterval(intervalId);
-			if (isConnected) {
-				if (sendMessage) {
-					const stopCommand: PeerData = {
-						type: DataType.CURIO_MOVE,
-						data: { message: "stop" },
-					};
-					sendMessage(stopCommand);
-				} else {
-					curio.stop();
-				}
-			}
-		};
-	}, [isMoving]);
+	// 	return () => {
+	// 		clearInterval(intervalId);
+	// 		if (isConnected) {
+	// 			if (sendMessage) {
+	// 				const stopCommand: PeerData = {
+	// 					type: DataType.CURIO_MOVE,
+	// 					data: { message: "stop" },
+	// 				};
+	// 				sendMessage(stopCommand);
+	// 			} else {
+	// 				curio.stop();
+	// 			}
+	// 		}
+	// 	};
+	// }, [isMoving]);
 
 	return (
 		<Stack

@@ -23,7 +23,7 @@ const ObjectDetection = ({ sendMessage }) => {
   let distanceh = 800
   // let flag = 0
   // const [distanceh,setdistanceh]= useState(0) 
-  const [alopen,setalopen] = useState(1)
+  const [alopen,setalopen] = useState(0)
 
 
 
@@ -338,7 +338,10 @@ const ObjectDetection = ({ sendMessage }) => {
 
       if (navigator.mediaDevices.getUserMedia) {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          // video: true,
+          video: {
+            facingMode: 'environment' // 使用后置摄像头
+          },
         });
         video.srcObject = stream;
         video
