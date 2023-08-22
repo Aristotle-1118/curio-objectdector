@@ -304,7 +304,7 @@ const ObjectDetection = ({ sendMessage }) => {
               break;
           }
           } else {
-            // setFlag(0);
+            setFlag(0);
           }
           
         });
