@@ -198,11 +198,11 @@ const ObjectDetection = ({ sendMessage }) => {
               prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
             );
             const newX = prediction.bbox[0] + 200;
-            context.fillText(
-              `xh: ${xh}, yh: ${yh}`,
-              newX,
-              prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
-            );
+            // context.fillText(
+            //   `xh: ${xh}, yh: ${yh}`,
+            //   newX,
+            //   prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
+            // );
 
             const personLeft = prediction.bbox[0];
             const personRight = prediction.bbox[0] + prediction.bbox[2];
@@ -312,10 +312,14 @@ const ObjectDetection = ({ sendMessage }) => {
             
             case 0:
               if (personRight < oneThird) {
+          
                 setFlag(0);//左转
               } else if (personLeft >= twoThirds) {
+            
                 setFlag(2);//右转
+
               } else if (personLeft <= oneThird && personRight >= twoThirds) {
+          
                 setFlag(1);//直行
               }
               break;
@@ -398,7 +402,7 @@ const ObjectDetection = ({ sendMessage }) => {
         ></video>
         <canvas className="detection-canvas" ref={canvasRef} />
       </div>
-      {flag === 1 ? "Person Detected" : "No Person Detected"}
+      {/* {flag === 1 ? "Person Detected" : "No Person Detected"} */}
     </div>
   );
 };
