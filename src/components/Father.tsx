@@ -352,7 +352,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					throttle={10}
 				/>
 			)} */}
-			{isConnected && (
+			{/* {isConnected && (
 				<Button
 					onClick={() => {
 						// startGoLeft();
@@ -375,7 +375,7 @@ export default function JoystickControlle({ sendMessage }: Props) {
 					{"moveforward"}
 
 				</Button>
-			)}
+			)} */}
 			{/* {isConnected && (
 
 					<Button 
@@ -419,9 +419,26 @@ export default function JoystickControlle({ sendMessage }: Props) {
                     sx={{ mt: 10 }}
                     variant="contained"
                 >
-                    {"detectcam"}
+                    {"detectcam using algorithm plan1"}
                 </Button>
+				
             )}
+			{isConnected && (
+                <Button
+                    onClick={() => {
+                        navigate('/detect'); // 在点击按钮时，导航到新的/detect路由
+                    }}
+                    style={{
+                        backgroundColor: "rgba(0, 61, 89, 255)",
+                    }}
+                    sx={{ mt: 10 }}
+                    variant="contained"
+                >
+                    {"detectcam using algorithm plan2"}
+                </Button>
+				
+            )}
+			
             {/* {flag === 1 ? 'Person Detected' : 'No Person Detected'} */}
 		</Stack>
 		

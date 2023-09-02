@@ -20,10 +20,10 @@ const ObjectDetection = ({ sendMessage }) => {
   // const [yh,setyh]= useState()
   let xh = 0
   let yh = 0
-  let distanceh = 800
+  let distanceh = 600
   // let flag = 0
   // const [distanceh,setdistanceh]= useState(0) 
-  const [alopen,setalopen] = useState(1)
+  const [alopen,setalopen] = useState(0)
 
 
 
@@ -110,62 +110,62 @@ const ObjectDetection = ({ sendMessage }) => {
       ;
     }
   };
-    useEffect(() => {
-      let intervalId;
+    // useEffect(() => {
+    //   let intervalId;
   
-      if (flag === 1) {
-        intervalId = setInterval(() => {
-          if (flag === 1) {
-            console.log("Going forward"); // 标记转向方向直走
-            // goForward();
-            // finalmove = (1000,1000,600)
-            sendCoordinates(xh,yh,distanceh)
-          }
-        }, 1000)}},[xh,yh,distanceh, goForward, goLeft, goRight,sendCoordinates]);
-  // useEffect(() => {
-  //   let intervalId;
+    //   if (flag === 1) {
+    //     intervalId = setInterval(() => {
+    //       if (flag === 1) {
+    //         console.log("Going forward"); // 标记转向方向直走
+    //         // goForward();
+    //         // finalmove = (1000,1000,600)
+    //         sendCoordinates(xh,yh,distanceh)
+    //       }
+    //     }, 1000)}},[xh,yh,distanceh, goForward, goLeft, goRight,sendCoordinates]);
+  useEffect(() => {
+    let intervalId;
 
-  //   if (flag === 1) {
-  //     intervalId = setInterval(() => {
-  //       if (flag === 1) {
-  //         console.log("Going forward"); // 标记转向方向直走
-  //         // goForward();
-  //         // finalmove = (1000,1000,600)
-  //         sendCoordinates(xh,yh,distanceh)
-  //       }
-  //     }, 1000);
-  //   } else if (flag === 0) {
-  //     intervalId = setInterval(() => {
-  //       if (flag == 0) {
-  //         console.log("Going left"); // 标记转向方向左转
-  //         goLeft();
-  //         // handleMove(1000,0,600)
-  //       }
-  //     }, 1000);
-  //   } else if (flag === 2) {
-  //     intervalId = setInterval(() => {
-  //       if (flag == 2) {
-  //         console.log("Going right"); // 标记转向方向右转
-  //         goRight();
-  //       }
-  //     }, 1000);
-  //   } else if (flag === 3) {
-  //     intervalId = setInterval(() => {
-  //       if (flag == 3) {
-  //         // console.log("smoooth Going right"); // 标记转向方向右转
-  //         sendCoordinates(xh,yh,distanceh)
-  //       }
-  //     }, 1000);
-  //   }else if(flag === 4){
-  //     sendCoordinates(xh,yh,distanceh)
-  //   }
+    if (flag === 1) {
+      intervalId = setInterval(() => {
+        if (flag === 1) {
+          console.log("Going forward"); // 标记转向方向直走
+          // goForward();
+          // finalmove = (1000,1000,600)
+          sendCoordinates(1000,1000,600)
+        }
+      }, 1000);
+    } else if (flag === 0) {
+      intervalId = setInterval(() => {
+        if (flag == 0) {
+          console.log("Going left"); // 标记转向方向左转
+          goLeft();
+          // handleMove(1000,0,600)
+        }
+      }, 1000);
+    } else if (flag === 2) {
+      intervalId = setInterval(() => {
+        if (flag == 2) {
+          console.log("Going right"); // 标记转向方向右转
+          goRight();
+        }
+      }, 1000);
+    } else if (flag === 3) {
+      intervalId = setInterval(() => {
+        if (flag == 3) {
+          // console.log("smoooth Going right"); // 标记转向方向右转
+          sendCoordinates(xh,yh,distanceh)
+        }
+      }, 1000);
+    }else if(flag === 4){
+      sendCoordinates(xh,yh,distanceh)
+    }
 
-  //   return () => {
-  //     if (intervalId) {
-  //       clearInterval(intervalId);
-  //     }
-  //   };
-  // }, [flag,xh,yh,distanceh, goForward, goLeft, goRight,handleMove]);
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [flag,xh,yh,distanceh, goForward, goLeft, goRight,handleMove]);
 
   useEffect(() => {
     const runObjectDetection = async () => {
@@ -195,6 +195,12 @@ const ObjectDetection = ({ sendMessage }) => {
             context.fillText(
               `${prediction.class} (${Math.round(prediction.score * 100)}%)`,
               prediction.bbox[0],
+              prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
+            );
+            const newX = prediction.bbox[0] + 200;
+            context.fillText(
+              `xh: ${xh}, yh: ${yh}`,
+              newX,
               prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
             );
 
